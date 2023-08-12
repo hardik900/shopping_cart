@@ -8,6 +8,7 @@ function Products(){
     const [data,setData] = useState([])
     const [withitem,setwithitem]=useState([])
     const [disable, setDisable] = useState(false)
+    const [pric,setPrice] = useState([])
 
     // console.log(withitem);
     useEffect(()=>{
@@ -23,7 +24,7 @@ function Products(){
     },[])
     useEffect(()=>{
         const x=data.map((i)=>{
-            return {...i,quantity:1}
+            return {...i,quantity:1,intialPrice:i.price}
         })
         setwithitem(x)
     },[data])
@@ -31,10 +32,18 @@ function Products(){
     const handleadd=(data)=>{
         let store = [...withitem]
         let quantity = data.quantity++
+        //console.log(quantity,"quantity")
+        // let price = data.price;
+        // price = (price*quantity)
+        //price = {...data, price }
+        //console.log(price,"price")
         let pp = {...data,quantity}
+        console.log(data,"data")
         console.log(pp,'pp')
         setwithitem(store)
+        //localStorage.setItem('arr',JSON.stringify("pp"))
     }
+    
 
     const handlesub=(data)=>{
         console.log("called handlesub")
@@ -64,21 +73,30 @@ function Products(){
         if(store_obj.length > 0 && store_obj[0].id === Click.id){
             console.log(arry,"arry")
             alert("Data already exist in LocalStorage You can only increase the quantity");
+
             const updated_data = arry.map((product)=>{
-                if(product.id === store_obj[0].id){
+                if(product.id === Click.id )  {  
                     product.quantity = Click.quantity;
+                    product.price = (product.intialPrice*Click.quantity)
+                    console.log(Click.quantity)
+                    console.log(product.price)
+                    // console.log(Click.price)
+                    // product.price = Click.price;
                 }
                 return product;
             })
+
             console.log(updated_data,"updated_data")
             localStorage.setItem("arr",JSON.stringify(updated_data))
 
         }else{
+            Click.price = (Click.price*Click.quantity)
+            console.log(Click.quantity)
+            console.log(Click.price)
             arry=[...arry]
             arry.push(Click)
             localStorage.setItem("arr",JSON.stringify(arry))
         }
-        // localStorage.setItem("arr",JSON.stringify(arry))
     }
         
     return(
